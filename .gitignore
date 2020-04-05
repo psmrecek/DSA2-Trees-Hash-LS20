@@ -4,3 +4,5 @@ DSA2stromy.vcxproj.filters
 DSA2stromy.vcxproj.user
 Debug
 .vs
+x64
+Release

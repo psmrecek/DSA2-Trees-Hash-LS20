@@ -4,10 +4,10 @@
 
 // Peter Smrecek
 
-struct Node
+struct NodeAVL
 {
-	struct Node* L;
-	struct Node* R;
+	struct NodeAVL* L;
+	struct NodeAVL* R;
 	int key;
 	int height;
 };
@@ -32,19 +32,19 @@ struct Node
 //	return heightAVLrec(N->L) - heightAVLrec(N->R);
 //}
 
-int height(struct Node* N) {									// Getter na vysku uzla
+int height(struct NodeAVL* N) {									// Getter na vysku uzla
 	if (N != NULL)
 		return N->height;
 	return -1;													// Neexistujuci uzol ma vysku -1
 }
 
-void setHeight(struct Node** N) {								// Setter pre vysku uzla, nastavi vacsiu z vysok podstromov
+void setHeight(struct NodeAVL** N) {								// Setter pre vysku uzla, nastavi vacsiu z vysok podstromov
 	(*N)->height = height((*N)->L) > height((*N)->R) ? height((*N)->L) + 1 : height((*N)->R) + 1;
 }
 
-struct Node* rightRotAVL(struct Node* N) {						// Rotacia doprava
+struct NodeAVL* rightRotAVL(struct NodeAVL* N) {						// Rotacia doprava
 	// LL
-	struct Node* newN = N->L;
+	struct NodeAVL* newN = N->L;
 	N->L = newN->R;
 	newN->R = N;
 
@@ -57,9 +57,9 @@ struct Node* rightRotAVL(struct Node* N) {						// Rotacia doprava
 	return newN;
 }
 
-struct Node* leftRotAVL(struct Node* N) {
+struct NodeAVL* leftRotAVL(struct NodeAVL* N) {
 	// RR
-	struct Node* newN = N->R;
+	struct NodeAVL* newN = N->R;
 	N->R = newN->L;
 	newN->L = N;
 
@@ -71,21 +71,21 @@ struct Node* leftRotAVL(struct Node* N) {
 	return newN;
 }
 
-struct Node* leftRightRotAVL(struct Node* N) {
+struct NodeAVL* leftRightRotAVL(struct NodeAVL* N) {
 	// LR
 	N->L = leftRotAVL(N->L);
 	return rightRotAVL(N);
 }
 
-struct Node* rightLeftRotAVL(struct Node* N) {
+struct NodeAVL* rightLeftRotAVL(struct NodeAVL* N) {
 	// RL
 	N->R = rightRotAVL(N->R);
 	return leftRotAVL(N);
 }
 
-struct Node* insertAVL(struct Node* N, int key) {
+struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 	if (N == NULL) {
-		struct Node* N = (struct Node*)malloc(sizeof(struct Node));
+		struct NodeAVL* N = (struct NodeAVL*)malloc(sizeof(struct NodeAVL));
 		N->L = NULL;
 		N->R = NULL;
 		N->key = key;
@@ -147,7 +147,15 @@ struct Node* insertAVL(struct Node* N, int key) {
 	return N;
 }
 
-void preOrderAVL(struct Node* N) {		// Preorder vypis (podla prezentacie)
+struct NodeAVL* search(struct NodeAVL* N, int key) {
+	if (N == NULL || N->key == key)
+		return N;
+	if (key < N->key)
+		return search(N->L, key);
+	return search(N->R, key);
+}
+
+void preOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 	if (N != NULL)
 	{
 		printf("%d ", N->key);
@@ -156,7 +164,7 @@ void preOrderAVL(struct Node* N) {		// Preorder vypis (podla prezentacie)
 	}
 }
 
-void preOrderAVL2(struct Node* N) {		// Preorder vypis (podla prezentacie)
+void preOrderAVL2(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 	if (N != NULL)
 	{
 //		printf("Kluc %d ma balans %d a ma vysku %d\n", N->key, balanceFactorAVLrec(N), N->height);
@@ -166,38 +174,48 @@ void preOrderAVL2(struct Node* N) {		// Preorder vypis (podla prezentacie)
 	}
 }
 
-void rightAVL(struct Node* N) {
-	if (N != NULL)
-	{
-		printf("%d ", N->key);
-		rightAVL(N->R);
-	}
-}
+//void rightAVL(struct Node* N) {
+//	if (N != NULL)
+//	{
+//		printf("%d ", N->key);
+//		rightAVL(N->R);
+//	}
+//}
 
-void leftAVL(struct Node* N) {
-	if (N != NULL)
-	{
-		printf("%d ", N->key);
-		leftAVL(N->L);
-	}
-}
+//void leftAVL(struct Node* N) {
+//	if (N != NULL)
+//	{
+//		printf("%d ", N->key);
+//		leftAVL(N->L);
+//	}
+//}
 
-int main() {
-	struct Node* root = NULL;
+
+
+int main2() {
+	struct NodeAVL* rootAVL = NULL;
 
 	int seed = 11;
 	int min = 1;
-	int max = 11;
+	int max = 10;
 	int lenght = 10;
+	int s;
 
 	srand(seed);
-	max++;
 	for (int i = 0; i < lenght; i++)
 	{
-		int k = (rand() % (max - min)) + min;
+		int k = (rand() % (max - min + 1)) + min;
 		printf("%d ", k);
-		root = insertAVL(root, k);
+		rootAVL = insertAVL(rootAVL, k);
+		if (i % 5 == 0)
+			s = k;
 	}
+
+	struct NodeAVL* najdeny = search(rootAVL, s);
+	if (najdeny != NULL && s != NULL)
+		printf("\n%d\n", najdeny->key);
+
+	
 
 	//root = insertAVL(root, 10);
 	//root = insertAVL(root, 20);
@@ -209,10 +227,10 @@ int main() {
 
 	printf("\n---------------\n");
 	printf("\nPreorder2\n");
-	preOrderAVL2(root);
+	preOrderAVL2(rootAVL);
 
 	printf("\nPreorder\n");
-	preOrderAVL(root);
+	preOrderAVL(rootAVL);
 
 	return 0;
 }
