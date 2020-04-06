@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "AVLHeader.h"
 
 // Peter Smrecek
 
@@ -10,6 +11,7 @@ struct NodeAVL
 	struct NodeAVL* R;
 	int key;
 	int height;
+	int count;
 };
 
 //int max(int n1, int n2) {
@@ -90,11 +92,15 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 		N->R = NULL;
 		N->key = key;
 		N->height = 0;
+		N->count = 1;
 		return N;
 	}
 	
-	if (N->key == key)
+	if (N->key == key) {
+		N->count += 1;
 		return N;
+	}
+		
 
 	if (key < N->key)
 		N->L = insertAVL(N->L, key);
@@ -147,18 +153,18 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 	return N;
 }
 
-struct NodeAVL* search(struct NodeAVL* N, int key) {
+struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {
 	if (N == NULL || N->key == key)
 		return N;
 	if (key < N->key)
-		return search(N->L, key);
-	return search(N->R, key);
+		return searchAVL(N->L, key);
+	return searchAVL(N->R, key);
 }
 
 void preOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 	if (N != NULL)
 	{
-		printf("%d ", N->key);
+		printf("%d(%d) ", N->key, N->count);
 		preOrderAVL(N->L);
 		preOrderAVL(N->R);
 	}
@@ -211,7 +217,7 @@ int main2() {
 			s = k;
 	}
 
-	struct NodeAVL* najdeny = search(rootAVL, s);
+	struct NodeAVL* najdeny = searchAVL(rootAVL, s);
 	if (najdeny != NULL && s != NULL)
 		printf("\n%d\n", najdeny->key);
 

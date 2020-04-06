@@ -3,6 +3,7 @@
 #include <time.h>
 #include <windows.h>
 #include "RBHeader.h"
+#include "AVLHeader.h"
 
 
 int* getArray(int seed, int number, int min, int max) {
@@ -34,45 +35,63 @@ void RBtestInsert(int* Array, int number) {
 		red_black_insert(Array[i]);
 }
 
-void test(int number, int seed, int min, int max) {
+struct NodeAVL* AVLtestSearch(struct NodeAVL* root, int* Array, int number) {
+	struct NodeAVL* N = NULL;
+	for (int i = 0; i < number; i++)
+		N = searchAVL(root, Array[i]);
+	return N;
+}
+
+struct node* RBtestSearch(int* Array, int number) {
+	struct node* N = NULL;
+	for (int i = 0; i < number; i++)
+		N = tree_search(Array[i]);
+	return N;
+}
+
+void testInsertSearch(int number, int seed, int min, int max) {
 	int* Array = getArray(seed, number, min, max);
 
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER start;
 	LARGE_INTEGER end;
-	double interval;
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
-
-	clock_t AVL;
-	AVL = clock();
-
 	struct NodeAVL* rootAVL = AVLtestInsert(Array, number);
-
-	AVL = clock() - AVL;
 	QueryPerformanceCounter(&end);
-	interval = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
-	double timeAVL = ((double)AVL) / CLOCKS_PER_SEC;
-	printf("Vlozit %d prvkov do AVL stromu trvalo %f sekund.\n", number, timeAVL);
-	printf("%f\n", interval);
+	double intervalAVLi = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Vlozit %d prvkov do AVL stromu trvalo %f sekund.\n", number, intervalAVLi);
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
-
-	clock_t RB;
-	RB = clock();
 	RBtestInsert(Array, number);
-	RB = clock() - RB;
 	QueryPerformanceCounter(&end);
-	interval = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
-	double timeRB = ((double)RB) / CLOCKS_PER_SEC;
-	printf("Vlozit %d prvkov do Red-Black stromu trvalo %f sekund.\n", number, timeRB);
-	printf("%f\n", interval);
+	double intervalRBi = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Vlozit %d prvkov do Red-Black stromu trvalo %f sekund.\n", number, intervalRBi);
+
+	printf("----------------------\n");
+
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&start);
+	struct NodeAVL* nAVL = AVLtestSearch(rootAVL, Array, number);
+	QueryPerformanceCounter(&end);
+	double intervalAVLs = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Najst %d prvkov v AVL strome trvalo %f sekund.\n", number, intervalAVLs);
+
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&start);
+	struct node* nRB = RBtestSearch(Array, number);
+	QueryPerformanceCounter(&end);
+	double intervalRBs = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Najst %d prvkov v Red-Black strome trvalo %f sekund.\n", number, intervalRBs);
+
+	printf("++++++++++++++++++++++\n\n");
 
 	free(Array);
-	printf("----------------------\n");
 }
+
+
 
 int main() {
 	int seed = 11;
@@ -80,21 +99,10 @@ int main() {
 	int max = INT_MAX;
 //	int number = 100000;
 
-	test(1000, seed, min, max);
-	test(10000, seed, min, max);
-	test(100000, seed, min, max);
-	test(1000000, seed, min, max);
+	testInsertSearch(1000, seed, min, max);
+	testInsertSearch(10000, seed, min, max);
+	testInsertSearch(100000, seed, min, max);
+	testInsertSearch(1000000, seed, min, max);
 
-//	printArray(Array, number);
-
-	
-
-//	tree_print(ROOT_RB);
-
-//	printf("\nPreorder\n");
-//	preOrderAVL(root);
-	printf("\n");
-
-	
 	return 0;
 }
