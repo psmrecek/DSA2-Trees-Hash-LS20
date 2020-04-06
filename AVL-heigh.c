@@ -34,14 +34,14 @@ struct NodeAVL
 //	return heightAVLrec(N->L) - heightAVLrec(N->R);
 //}
 
-int height(struct NodeAVL* N) {									// Getter na vysku uzla
+int heightAVL(struct NodeAVL* N) {									// Getter na vysku uzla
 	if (N != NULL)
 		return N->height;
 	return -1;													// Neexistujuci uzol ma vysku -1
 }
 
-void setHeight(struct NodeAVL** N) {								// Setter pre vysku uzla, nastavi vacsiu z vysok podstromov
-	(*N)->height = height((*N)->L) > height((*N)->R) ? height((*N)->L) + 1 : height((*N)->R) + 1;
+void setHeightAVL(struct NodeAVL** N) {								// Setter pre vysku uzla, nastavi vacsiu z vysok podstromov
+	(*N)->height = heightAVL((*N)->L) > heightAVL((*N)->R) ? heightAVL((*N)->L) + 1 : heightAVL((*N)->R) + 1;
 }
 
 struct NodeAVL* rightRotAVL(struct NodeAVL* N) {						// Rotacia doprava
@@ -53,8 +53,8 @@ struct NodeAVL* rightRotAVL(struct NodeAVL* N) {						// Rotacia doprava
 	//N->height = heightAVLrec(N);
 	//newN->height = heightAVLrec(newN);
 	
-	setHeight(&N);
-	setHeight(&newN);
+	setHeightAVL(&N);
+	setHeightAVL(&newN);
 
 	return newN;
 }
@@ -68,8 +68,8 @@ struct NodeAVL* leftRotAVL(struct NodeAVL* N) {
 	//N->height = heightAVLrec(N);
 	//newN->height = heightAVLrec(newN);
 
-	setHeight(&N);
-	setHeight(&newN);
+	setHeightAVL(&N);
+	setHeightAVL(&newN);
 	return newN;
 }
 
@@ -107,8 +107,8 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 	else
 		N->R = insertAVL(N->R, key);
 
-	setHeight(&N);
-	int balance = height(N->L) - height(N->R);
+	setHeightAVL(&N);
+	int balance = heightAVL(N->L) - heightAVL(N->R);
 
 	if (balance == 2)						// LL a LR 
 	{
@@ -151,6 +151,21 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 
 
 	return N;
+}
+
+struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight) {
+	if (N == NULL)
+		return N;
+	*maxHeight = *maxHeight > N->height ? *maxHeight : N->height;
+	return searchMaxHeightAVL(N->L, &maxHeight);
+	return searchMaxHeightAVL(N->R, &maxHeight);
+		
+}
+
+int getMaxHeightAVL(struct NodeAVL* N) {
+	int maxHeight = 0;
+	N = searchMaxHeightAVL(N, &maxHeight);
+	return maxHeight;
 }
 
 struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {
@@ -203,15 +218,15 @@ int main2() {
 
 	int seed = 11;
 	int min = 1;
-	int max = 10;
-	int lenght = 10;
+	int max = INT_MAX;
+	int lenght = 1;
 	int s;
 
 	srand(seed);
 	for (int i = 0; i < lenght; i++)
 	{
 		int k = (rand() % (max - min + 1)) + min;
-		printf("%d ", k);
+		//printf("%d ", k);
 		rootAVL = insertAVL(rootAVL, k);
 		if (i % 5 == 0)
 			s = k;
@@ -221,7 +236,10 @@ int main2() {
 	if (najdeny != NULL && s != NULL)
 		printf("\n%d\n", najdeny->key);
 
-	
+	int maxHeight = 0;
+	struct NodeAVL* rootAVL2 = rootAVL;
+	rootAVL2 = searchMaxHeightAVL(rootAVL2, &maxHeight);
+	printf("Maximalna vyska stromu je %d\n", maxHeight);
 
 	//root = insertAVL(root, 10);
 	//root = insertAVL(root, 20);
@@ -231,12 +249,12 @@ int main2() {
 	//root = insertAVL(root, 50);
 	//root = insertAVL(root, 25);
 
-	printf("\n---------------\n");
-	printf("\nPreorder2\n");
-	preOrderAVL2(rootAVL);
+	//printf("\n---------------\n");
+	//printf("\nPreorder2\n");
+	//preOrderAVL2(rootAVL);
 
-	printf("\nPreorder\n");
-	preOrderAVL(rootAVL);
+	//printf("\nPreorder\n");
+	//preOrderAVL(rootAVL);
 
 	return 0;
 }
