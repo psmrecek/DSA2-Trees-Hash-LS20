@@ -8,12 +8,13 @@
 
 int* getArray(int seed, int number, int min, int max) {
 	int* Arr = (int*)malloc(number * sizeof(int));
-	srand(seed);
-	for (int i = 0; i < number; i++)
-		Arr[i] = (rand() % (max - min + 1)) + min;
 
+	//srand(seed);
 	//for (int i = 0; i < number; i++)
-	//	Arr[i] = i+1;
+	//	Arr[i] = (rand() % (max - min + 1)) + min;
+
+	for (int i = 0; i < number; i++)
+		Arr[i] = i+1;
 
 	return Arr;
 }
@@ -41,9 +42,11 @@ void RBtestInsert(int* Array, int number) {
 
 struct NodeAVL* AVLtestSearch(struct NodeAVL* root, int* Array, int number) {
 	struct NodeAVL* N = NULL;
-	for (int i = 0; i < number; i++)
+	int i;
+	for (i = 0; i < number; i++) {
 		N = searchAVL(root, Array[i]);
-	return N;
+	}
+	return root;
 }
 
 struct node* RBtestSearch(int* Array, int number) {
@@ -66,9 +69,10 @@ void testInsertSearch(int number, int seed, int min, int max) {
 	QueryPerformanceCounter(&end);
 	double intervalAVLi = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Vlozit %d prvkov do AVL stromu trvalo %f sekund.\n", number, intervalAVLi);
-	printf("Maximalna vyska stromu je %d\n", getMaxHeightAVL(rootAVL));
 
-
+	//printf("Maximalna vyska stromu je %d\n", getMaxHeightAVL(rootAVL));
+	//preOrderAVL(rootAVL);
+	//printf("\n");
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
@@ -101,20 +105,21 @@ void testInsertSearch(int number, int seed, int min, int max) {
 
 
 
-int main() {
-//	int seed = 11;
-	int seed = time(0);
-	int min = 1;
+int mainTest() {
+	int seed = 11;
+//	int seed = time(0);
+	int min = 0;
 	int max = INT_MAX;
-//	int number = 100000;
 
+//	testInsertSearch(10, seed, min, max);
+	//testInsertSearch(100, seed, min, max);
 	testInsertSearch(1000, seed, min, max);
 	testInsertSearch(10000, seed, min, max);
 	testInsertSearch(100000, seed, min, max);
 	testInsertSearch(1000000, seed, min, max);
 //	testInsertSearch(10000000, seed, min, max);
 
-//	main2();
+	//preOrderAVL(rootAVL);
 
 	return 0;
 }
