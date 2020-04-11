@@ -111,6 +111,7 @@
 //
 //	if (balance == 2)						// LL a LR 
 //	{
+//		printf("Do vyrovnania ide %d\n", N->key);
 //		if (key < N->L->key)
 //			return rightRotAVL(N);			// LL
 //		else
@@ -119,6 +120,7 @@
 //
 //	if (balance == -2)						// RR a RL
 //	{
+//		printf("Do vyrovnania ide %d\n", N->key);
 //		if (key > N->R->key)
 //			return leftRotAVL(N);			// RR
 //		else
@@ -187,7 +189,7 @@
 //
 //
 //
-//int main2() {
+//int main() {
 //	struct NodeAVL* rootAVL = NULL;
 //
 //	int seed = 11;
@@ -196,24 +198,24 @@
 //	int lenght = 10;
 //	int s;
 //
-//	srand(seed);
-//	for (int i = 0; i < lenght; i++)
-//	{
-//		int k = (rand() % (max - min + 1)) + min;
-//		//printf("%d ", k);
-//		rootAVL = insertAVL(rootAVL, k);
-//		if (i % 5 == 0)
-//			s = k;
-//	}
+//	//srand(seed);
+//	//for (int i = 0; i < lenght; i++)
+//	//{
+//	//	int k = (rand() % (max - min + 1)) + min;
+//	//	//printf("%d ", k);
+//	//	rootAVL = insertAVL(rootAVL, k);
+//	//	if (i % 5 == 0)
+//	//		s = k;
+//	//}
 //
-//	struct NodeAVL* najdeny = searchAVL(rootAVL, s);
-//	if (najdeny != NULL && s != NULL)
-//		printf("\nNajdeny kluc %d\n", najdeny->key);
+//	//struct NodeAVL* najdeny = searchAVL(rootAVL, s);
+//	//if (najdeny != NULL && s != NULL)
+//	//	printf("\nNajdeny kluc %d\n", najdeny->key);
 //
 //	
 //
-//	//rootAVL = insertAVL(rootAVL, 10);
-//	//rootAVL = insertAVL(rootAVL, 20);
+//	rootAVL = insertAVL(rootAVL, 10);
+//	rootAVL = insertAVL(rootAVL, 20);
 //	//rootAVL = insertAVL(rootAVL, 25);
 //	//rootAVL = insertAVL(rootAVL, 30);
 //	//rootAVL = insertAVL(rootAVL, 40);
@@ -221,14 +223,14 @@
 //	//rootAVL = insertAVL(rootAVL, 25);
 //
 //
-//	printf("Maximalna vyska stromu je %d\n", getMaxHeightAVL(rootAVL));
+//	//printf("Maximalna vyska stromu je %d\n", getMaxHeightAVL(rootAVL));
 //
-//	//printf("\n---------------\n");
-//	//printf("\nPreorder2\n");
-//	//preOrderAVL2(rootAVL);
+//	printf("\n---------------\n");
+//	printf("\nPreorder2\n");
+//	preOrderAVL2(rootAVL);
 //
-//	printf("\nPreorder\n");
-//	preOrderAVL(rootAVL);
+//	//printf("\nPreorder\n");
+//	//preOrderAVL(rootAVL);
 //
 //	return 0;
 //}

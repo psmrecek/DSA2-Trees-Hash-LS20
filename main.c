@@ -5,6 +5,7 @@
 #include "RBHeader.h"
 #include "AVLHeader.h"
 #include "HashHeader.h"
+#include "Hash-prevzate.h"
 
 int* getArray(int seed, int number, int min, int max) {
 	int* Arr = (int*)malloc(number * sizeof(int));
@@ -72,9 +73,44 @@ int* DoubleHashInsert(int *size, int* Array, int number) {
 }
 
 void DoubleHashSearch(int* hashTable, int size, int* Array, int number) {
+	int b;
 	for (int i = 0; i < number; i++)
 	{
-		doubleSearch(hashTable, Array[i], size);
+		b = doubleSearch(hashTable, Array[i], size);
+	}
+}
+
+void HashTableInsert(HashTable* table, int* Array, int number) {
+	ht_setup(&*table, sizeof(int), sizeof(int), 10);
+	ht_reserve(&*table, 100);
+	int x;
+	int y = 4;
+	for (int i = 0; i < number; i++)
+	{
+		x = Array[i];
+		ht_insert(&*table, &x, &y);
+	}
+}
+
+void HashTableSearch(HashTable* table, int* Array, int number) {
+	int x;
+	int b;
+	for (int i = 0; i < number; i++)
+	{
+		x = Array[i];
+		if (ht_contains(&*table, &x)) {
+			b = 1;
+			//printf("Tabulka obsahuje %d\n", x);
+			//y = *(int*)ht_lookup(&*table, &x);
+			///* Or use convenience macros */
+			//y = HT_LOOKUP_AS(int, &table, &x);
+			//printf("%d's value is: %d\n", x, y);
+		}
+		else
+		{
+			b = 0;
+			//printf("ee %d\n", i);
+		}
 	}
 }
 
@@ -123,20 +159,39 @@ void testInsertSearch(int number, int seed, int min, int max) {
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
-	int size = 0;
-	int* hashTable = DoubleHashInsert(&size, Array, number);
+	int sizeHashTable = 0;
+	int* DoubleHashTable = DoubleHashInsert(&sizeHashTable, Array, number);
 	QueryPerformanceCounter(&end);
 	double intervalDoubleHashi = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Vlozit %d prvkov do Double-Hashing tabulky trvalo %f sekund.\n", number, intervalDoubleHashi);
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
-	DoubleHashSearch(hashTable, size, Array, number);
+	DoubleHashSearch(DoubleHashTable, sizeHashTable, Array, number);
 	QueryPerformanceCounter(&end);
 	double intervalDoubleHashs = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Najst %d prvkov v Double-Hashing tabulke trvalo %f sekund.\n", number, intervalDoubleHashs);
 
-	free(hashTable);
+	free(DoubleHashTable);
+
+	printf("----------------------\n");
+
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&start);
+	HashTable table;
+	HashTableInsert(&table, Array, number);
+	QueryPerformanceCounter(&end);
+	double intervalGitHashI = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Vlozit %d prvkov do prevzatej hash tabulky trvalo %f sekund.\n", number, intervalGitHashI);
+
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&start);
+	HashTableSearch(&table, Array, number);
+	QueryPerformanceCounter(&end);
+	double intervalGitHashS = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
+	printf("Najst %d prvkov v prevzatej hash tabulke trvalo %f sekund.\n", number, intervalGitHashS);
+
+
 	printf("++++++++++++++++++++++\n\n");
 
 
@@ -149,15 +204,27 @@ int main() {
 	int min = 0;
 	int max = INT_MAX;
 
+	printf("10\n");
 	testInsertSearch(10, seed, min, max);
+
+	printf("100\n");
 	testInsertSearch(100, seed, min, max);
+
+	printf("1k\n");
 	testInsertSearch(1000, seed, min, max);
+
+	printf("10k\n");
 	testInsertSearch(10000, seed, min, max);
+
+	printf("100k\n");
 	testInsertSearch(100000, seed, min, max);
+
+	printf("1m\n");
 	testInsertSearch(1000000, seed, min, max);
+
+	printf("10m\n");
 	testInsertSearch(10000000, seed, min, max);
 
-	//preOrderAVL(rootAVL);
 
 	return 0;
 }
