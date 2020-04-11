@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
-#include "RBHeader.h"
-#include "AVLHeader.h"
-#include "HashHeader.h"
-#include "Hash-prevzate.h"
+
+#include "AVL-Smrecek.h"
+#include "RedBlack-prevzate-Smrecek.h"
+
+#include "DoubleHashing-Smrecek.h"
+#include "Chaining-prevzate-Smrecek.h"
 
 int* getArray(int seed, int number, int min, int max) {
 	int* Arr = (int*)malloc(number * sizeof(int));
@@ -202,29 +204,31 @@ int main() {
 	int seed = 11;
 //	int seed = time(0);
 	int min = 0;
-	int max = INT_MAX;
+	int max = 100000000;
 
-	printf("10\n");
-	testInsertSearch(10, seed, min, max);
+	//printf("10\n");
+	//testInsertSearch(10, seed, min, max);
 
-	printf("100\n");
-	testInsertSearch(100, seed, min, max);
+	//printf("100\n");
+	//testInsertSearch(100, seed, min, max);
 
-	printf("1k\n");
-	testInsertSearch(1000, seed, min, max);
+	//printf("1k\n");
+	//testInsertSearch(1000, seed, min, max);
 
-	printf("10k\n");
-	testInsertSearch(10000, seed, min, max);
+	//printf("10k\n");
+	//testInsertSearch(10000, seed, min, max);
 
-	printf("100k\n");
-	testInsertSearch(100000, seed, min, max);
+	//printf("100k\n");
+	//testInsertSearch(100000, seed, min, max);
 
-	printf("1m\n");
-	testInsertSearch(1000000, seed, min, max);
+	//printf("1m\n");
+	//testInsertSearch(1000000, seed, min, max);
 
 	printf("10m\n");
 	testInsertSearch(10000000, seed, min, max);
 
+	//printf("100m\n");
+	//testInsertSearch(100000000, seed, min, max);
 
 	return 0;
 }

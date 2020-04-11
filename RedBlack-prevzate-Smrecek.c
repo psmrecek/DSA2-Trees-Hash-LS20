@@ -19,7 +19,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "RBHeader.h"			// Hlavicka vytiahnuta von
+#include "RedBlack-prevzate-Smrecek.h"			// Hlavicka vytiahnuta von
 
 #define RED 0
 #define BLACK 1

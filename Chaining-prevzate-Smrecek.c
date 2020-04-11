@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include "Hash-prevzate.h"
+#include "Chaining-prevzate-Smrecek.h"
 
 // https://github.com/goldsborough/hashtable
 

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-#include "HashHeader.h"
+#include "DoubleHashing-Smrecek.h"
 
 Primes[] = { 13, 113, 1013, 10037, 100043, 1000037, 10000103, 100000049, 1000000033 };
 
