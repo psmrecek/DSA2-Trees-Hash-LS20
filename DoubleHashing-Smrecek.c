@@ -4,7 +4,8 @@
 #include <math.h>
 #include "DoubleHashing-Smrecek.h"
 
-Primes[] = { 13, 113, 1013, 10037, 100043, 1000037, 10000103, 100000049, 1000000033 };
+Primes[17] = {131, 541, 1031, 5021, 10037, 50051, 100151, 500069, 1000037, 5000101,
+	10000121, 50000131, 100000049, 500000071, 1000000021, 5000000141, 10000000061 };
 
 int* createHashTable(int size) {
 	int* hashTable = malloc(size * sizeof(int));
@@ -100,23 +101,5 @@ int doubleSearch(int* hashTable, int key, int size) {
 		indexC = doubleCompress(key, size, iter++, indexH1, indexH2);
 	}
 	//printf("Kluc %d sa v tabulke nenachadza.\n", key);
-	return 0;
-}
-
-int main2() {
-
-	int size = Primes[0];
-	int count = 0;
-
-	int* hashTable = createHashTable(size);
-
-	for (int key = 1; key < 600; key++)
-	{
-		hashTable = autoInsert(hashTable, key, &size, &count);
-	}
-
-	doubleSearch(hashTable, 1001, size);
-	doubleSearch(hashTable, 1009, size);
-
 	return 0;
 }

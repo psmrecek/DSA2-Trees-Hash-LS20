@@ -1,8 +1,10 @@
-#pragma once
+#ifndef RB_HEADER_FILE
+#define RB_HEADER_FILE
+
 #define RED 0
 #define BLACK 1
-
-struct node {					// Zakomentovane
+								// Kompletne vytvoreny .h subor pre potreby pouzitia implementacie v Testovac.c
+struct node {					// Zakomentovane v povodnom subore, presunute do headera aby som mohol pouzivat v Testovac.c
 	int key;
 	int color;
 	struct node* parent;
@@ -11,7 +13,7 @@ struct node {					// Zakomentovane
 };
 
 /* Global, since all function will access them */
-struct node* ROOT_RB;							// Obom premennym som pridal _RB aby sa s nicim inym nepomylili
+struct node* ROOT_RB;			// Obom premennym som pridal _RB aby sa s nicim inym nepomylili
 struct node* NILL_RB;
 
 void left_rotate(struct node* x);
@@ -24,3 +26,5 @@ struct node* tree_minimum(struct node* x);
 void red_black_transplant(struct node* u, struct node* v);
 void red_black_delete(struct node* z);
 void red_black_delete_fixup(struct node* x);
+
+#endif

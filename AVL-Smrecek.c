@@ -83,6 +83,7 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 		N->R = insertAVL(N->R, key);
 
 	setHeightAVL(&N);
+
 	int balance = heightAVL(N->L) - heightAVL(N->R);
 
 	if (balance == 2)						// LL a LR 
@@ -107,13 +108,16 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight) {
 	if (N == NULL)
 		return N;
+
 	*maxHeight = *maxHeight > N->height ? *maxHeight : N->height;
-	return searchMaxHeightAVL(N->L, &maxHeight);
-	return searchMaxHeightAVL(N->R, &maxHeight);
+
+	return searchMaxHeightAVL(N->L, &*maxHeight);
+	return searchMaxHeightAVL(N->R, &*maxHeight);
 }
 
 int getMaxHeightAVL(struct NodeAVL* N) {
 	int maxHeight = 0;
+
 	N = searchMaxHeightAVL(N, &maxHeight);
 	return maxHeight;
 }
@@ -132,5 +136,23 @@ void preOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 		printf("%d-%dx ", N->key, N->count);
 		preOrderAVL(N->L);
 		preOrderAVL(N->R);
+	}
+}
+
+void inOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
+	if (N != NULL)
+	{
+		preOrderAVL(N->L);
+		printf("%d-%dx ", N->key, N->count);
+		preOrderAVL(N->R);
+	}
+}
+
+void postOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
+	if (N != NULL)
+	{
+		preOrderAVL(N->L);
+		preOrderAVL(N->R);
+		printf("%d-%dx ", N->key, N->count);
 	}
 }

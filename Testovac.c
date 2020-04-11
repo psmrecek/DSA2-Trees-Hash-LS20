@@ -9,12 +9,8 @@
 #include "DoubleHashing-Smrecek.h"
 #include "Chaining-prevzate-Smrecek.h"
 
-int* getArray(int seed, int number, int min, int max) {
+int* getArray(int number) {
 	int* Arr = (int*)malloc(number * sizeof(int));
-
-	//srand(seed);
-	//for (int i = 0; i < number; i++)
-	//	Arr[i] = (rand() % (max - min + 1)) + min;
 
 	for (int i = 0; i < number; i++)
 		Arr[i] = i+1;
@@ -102,22 +98,16 @@ void HashTableSearch(HashTable* table, int* Array, int number) {
 		x = Array[i];
 		if (ht_contains(&*table, &x)) {
 			b = 1;
-			//printf("Tabulka obsahuje %d\n", x);
-			//y = *(int*)ht_lookup(&*table, &x);
-			///* Or use convenience macros */
-			//y = HT_LOOKUP_AS(int, &table, &x);
-			//printf("%d's value is: %d\n", x, y);
 		}
 		else
 		{
 			b = 0;
-			//printf("ee %d\n", i);
 		}
 	}
 }
 
-void testInsertSearch(int number, int seed, int min, int max) {
-	int* Array = getArray(seed, number, min, max);
+void AVLtestInsertSearch(int number) {
+	int* Array = getArray(number);
 
 	LARGE_INTEGER frequency;
 	LARGE_INTEGER start;
@@ -137,11 +127,15 @@ void testInsertSearch(int number, int seed, int min, int max) {
 	double intervalAVLs = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Najst %d prvkov v AVL strome trvalo %f sekund.\n", number, intervalAVLs);
 
-	//printf("Maximalna vyska stromu je %d\n", getMaxHeightAVL(rootAVL));
-	//preOrderAVL(rootAVL);
-	//printf("\n");
+	free(Array);
+}
 
-	printf("----------------------\n");
+void RBtestInsertSearch(int number) {
+	int* Array = getArray(number);
+
+	LARGE_INTEGER frequency;
+	LARGE_INTEGER start;
+	LARGE_INTEGER end;
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
@@ -157,7 +151,15 @@ void testInsertSearch(int number, int seed, int min, int max) {
 	double intervalRBs = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Najst %d prvkov v Red-Black strome trvalo %f sekund.\n", number, intervalRBs);
 
-	printf("----------------------\n");
+	free(Array);
+}
+
+void DHtestInsertSearch(int number) {
+	int* Array = getArray(number);
+
+	LARGE_INTEGER frequency;
+	LARGE_INTEGER start;
+	LARGE_INTEGER end;
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
@@ -176,7 +178,15 @@ void testInsertSearch(int number, int seed, int min, int max) {
 
 	free(DoubleHashTable);
 
-	printf("----------------------\n");
+	free(Array);
+}
+
+void CHtestInsertSearch(int number) {
+	int* Array = getArray(number);
+
+	LARGE_INTEGER frequency;
+	LARGE_INTEGER start;
+	LARGE_INTEGER end;
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&start);
@@ -193,42 +203,72 @@ void testInsertSearch(int number, int seed, int min, int max) {
 	double intervalGitHashS = (double)(end.QuadPart - start.QuadPart) / frequency.QuadPart;
 	printf("Najst %d prvkov v prevzatej hash tabulke trvalo %f sekund.\n", number, intervalGitHashS);
 
-
-	printf("++++++++++++++++++++++\n\n");
-
-
 	free(Array);
 }
 
 int main() {
-	int seed = 11;
-//	int seed = time(0);
-	int min = 0;
-	int max = 100000000;
+	int n = 0;
+	
+	char choice;
 
-	//printf("10\n");
-	//testInsertSearch(10, seed, min, max);
+	printf("Vyber testovanu dynamicku mnozinu:\nZvol 'a' pre AVL-Strom\nZvol 'b' pre Red-Black strom"
+		"\nZvol 'c' pre Double Hashing tabulku\nZvol 'd' pre Chaining hashovaciu tabulku\n");
+	scanf("%c", &choice);
+	while (choice<'a' || choice>'d')
+	{
+		printf("Neplatny vstup!\nVyber testovanu dynamicku mnozinu:\nZvol 'a' pre AVL-Strom\nZvol 'b' pre Red-Black strom"
+			"\nZvol 'c' pre Double Hashing tabulku\nZvol 'd' pre Chaining hashovaciu tabulku\n");
+		scanf("%c", &choice);
+	}
 
-	//printf("100\n");
-	//testInsertSearch(100, seed, min, max);
+	printf("Vyber pocet vkladov do mnoziny\nZvol '1' pre 100\nZvol '2' pre 1k\nZvol '3' pre 10k\n"
+		"Zvol '4' pre 100k\nZvol '5' pre 1m\nZvol '6' pre 10m\nZvol '7' pre 20m\nAlebo napis inu hodnotu manualne\n");
 
-	//printf("1k\n");
-	//testInsertSearch(1000, seed, min, max);
+	scanf("%d", &n);
+	switch (n)
+	{
+	case 1:
+		n = 100;
+		break;
+	case 2:
+		n = 1000;
+		break;
+	case 3:
+		n = 10000;
+		break;
+	case 4:
+		n = 100000;
+		break;
+	case 5:
+		n = 1000000;
+		break;
+	case 6:
+		n = 10000000;
+		break;
+	case 7:
+		n = 20000000;
+		break;
+	default: printf("Manualne bolo zvolene cislo %d\n", n);
+		break;
+	}
 
-	//printf("10k\n");
-	//testInsertSearch(10000, seed, min, max);
-
-	//printf("100k\n");
-	//testInsertSearch(100000, seed, min, max);
-
-	//printf("1m\n");
-	//testInsertSearch(1000000, seed, min, max);
-
-	printf("10m\n");
-	testInsertSearch(10000000, seed, min, max);
-
-	//printf("100m\n");
-	//testInsertSearch(100000000, seed, min, max);
+	switch (choice)
+	{
+	case 'a':
+		AVLtestInsertSearch(n);
+		break;
+	case 'b':
+		RBtestInsertSearch(n);
+		break;
+	case 'c':
+		DHtestInsertSearch(n);
+		break;
+	case 'd':
+		CHtestInsertSearch(n);
+		break;
+	default: printf("Neplatny vstup!\n");
+		break;
+	}
 
 	return 0;
 }
