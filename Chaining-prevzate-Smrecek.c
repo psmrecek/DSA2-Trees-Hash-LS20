@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "Chaining-prevzate-Smrecek.h"
 
+// Prevzata hashovacia tabulka s automatickym zvacsovanim, kolizie riesene chainingom
 // https://github.com/goldsborough/hashtable
 
 int ht_setup(HashTable* table,

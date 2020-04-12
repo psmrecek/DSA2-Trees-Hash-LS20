@@ -5,13 +5,13 @@
 
 // Peter Smrecek
 
-struct NodeAVL
+struct NodeAVL													// Struktura pre prvok AVL stromu
 {
-	struct NodeAVL* L;
-	struct NodeAVL* R;
-	int key;
-	int height;
-	int count;
+	struct NodeAVL* L;											// Smernik na laveho potomka
+	struct NodeAVL* R;											// Smrernik na praveho potomka
+	int key;													// Ulozeny kluc
+	int height;													// Ulozena vyska uzla
+	int count;													// Ulozeny pocet vyskytov daneho kluca v strome
 };
 
 int heightAVL(struct NodeAVL* N) {								// Getter na vysku uzla
@@ -26,7 +26,7 @@ void setHeightAVL(struct NodeAVL** N) {							// Setter pre vysku uzla, nastavi 
 	(*N)->height = left > right ? left + 1 : right + 1;
 }
 
-struct NodeAVL* rightRotAVL(struct NodeAVL* N) {				// Rotacia doprava
+struct NodeAVL* rightRotAVL(struct NodeAVL* N) {				// Rotacia doprava so zmenami vysok
 	// LL
 	struct NodeAVL* newN = N->L;
 	N->L = newN->R;
@@ -38,7 +38,7 @@ struct NodeAVL* rightRotAVL(struct NodeAVL* N) {				// Rotacia doprava
 	return newN;
 }
 
-struct NodeAVL* leftRotAVL(struct NodeAVL* N) {
+struct NodeAVL* leftRotAVL(struct NodeAVL* N) {					// Rotacia dolava so zmenami vysok
 	// RR
 	struct NodeAVL* newN = N->R;
 	N->R = newN->L;
@@ -49,20 +49,42 @@ struct NodeAVL* leftRotAVL(struct NodeAVL* N) {
 	return newN;
 }
 
-struct NodeAVL* leftRightRotAVL(struct NodeAVL* N) {
+struct NodeAVL* leftRightRotAVL(struct NodeAVL* N) {			// Rotacia dolava a doprava
 	// LR
 	N->L = leftRotAVL(N->L);
 	return rightRotAVL(N);
 }
 
-struct NodeAVL* rightLeftRotAVL(struct NodeAVL* N) {
+struct NodeAVL* rightLeftRotAVL(struct NodeAVL* N) {			// Rotacia doprava a dolava
 	// RL
 	N->R = rightRotAVL(N->R);
 	return leftRotAVL(N);
 }
 
-struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
-	if (N == NULL) {
+struct NodeAVL* balancing(struct NodeAVL** N, int key) {
+	int balance = heightAVL((*N)->L) - heightAVL((*N)->R);		// Vypocet balance factoru
+
+	if (balance == 2)							// LL a LR		// AVL umoznuje balance factor iba {-1, 0, 1}, preto ak je 2, kontroluje
+	{															// L pripady a rotuje podla potreby
+		if (key < (*N)->L->key)
+			return rightRotAVL((*N));			// LL
+		else
+			return leftRightRotAVL((*N));		// LR
+	}
+
+	if (balance == -2)							// RR a RL		// Ak je balance -2, kontroluje R pripady a rotuje podla potreby
+	{
+		if (key > (*N)->R->key)
+			return leftRotAVL((*N));			// RR
+		else
+			return rightLeftRotAVL((*N));		// RL
+	}
+	return (*N);
+}
+	
+
+struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {			// Rekurzivna funkcia na vlozenie noveho prvku do stromu
+	if (N == NULL) {											// Ak je vstupny smernik na strukturu prazdny, tak ju alokuje
 		struct NodeAVL* N = (struct NodeAVL*)malloc(sizeof(struct NodeAVL));
 		N->L = NULL;
 		N->R = NULL;
@@ -72,41 +94,23 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {
 		return N;
 	}
 
-	if (N->key == key) {
+	if (N->key == key) {										// Ak sa uz dany kluc v strome nachadza, inkrementuje jeho pocet
 		N->count += 1;
 		return N;
 	}
 
-	if (key < N->key)
+	if (key < N->key)											// Rekurzivny prechod cez strom smerom k pozadovanemu miestu vlozenia prvku
 		N->L = insertAVL(N->L, key);
 	else
 		N->R = insertAVL(N->R, key);
 
-	setHeightAVL(&N);
+	setHeightAVL(&N);											// Nastavenie novej vysky uzla
 
-	int balance = heightAVL(N->L) - heightAVL(N->R);
-
-	if (balance == 2)						// LL a LR 
-	{
-		if (key < N->L->key)
-			return rightRotAVL(N);			// LL
-		else
-			return leftRightRotAVL(N);		// LR
-	}
-
-	if (balance == -2)						// RR a RL
-	{
-		if (key > N->R->key)
-			return leftRotAVL(N);			// RR
-		else
-			return rightLeftRotAVL(N);		// RL
-	}
-
-	return N;
+	return balancing(&N, key);
 }
 
 struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight) {
-	if (N == NULL)
+	if (N == NULL)												// Pomocna funkcia pre rekurzivny vypocet maximalnej vysky stromu
 		return N;
 
 	*maxHeight = *maxHeight > N->height ? *maxHeight : N->height;
@@ -115,14 +119,14 @@ struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight) {
 	return searchMaxHeightAVL(N->R, &*maxHeight);
 }
 
-int getMaxHeightAVL(struct NodeAVL* N) {
+int getMaxHeightAVL(struct NodeAVL* N) {						// Pomocna funkcia spustajuca rekurzivny vypocet vysky stromu
 	int maxHeight = 0;
 
 	N = searchMaxHeightAVL(N, &maxHeight);
 	return maxHeight;
 }
 
-struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {
+struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {			// Rekurzivna funkcia na najdenie prvku v strome
 	if (N == NULL || N->key == key)
 		return N;
 	if (key < N->key)
@@ -130,7 +134,7 @@ struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {
 	return searchAVL(N->R, key);
 }
 
-void preOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
+void preOrderAVL(struct NodeAVL* N) {							// Preorder rekurzivny vypis (podla prezentacie)
 	if (N != NULL)
 	{
 		printf("%d-%dx ", N->key, N->count);
@@ -139,7 +143,7 @@ void preOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 	}
 }
 
-void inOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
+void inOrderAVL(struct NodeAVL* N) {							// Ineorder rekurzivny vypis (podla prezentacie)
 	if (N != NULL)
 	{
 		preOrderAVL(N->L);
@@ -148,7 +152,7 @@ void inOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
 	}
 }
 
-void postOrderAVL(struct NodeAVL* N) {		// Preorder vypis (podla prezentacie)
+void postOrderAVL(struct NodeAVL* N) {							// Postorder rekurzivny vypis (podla prezentacie)
 	if (N != NULL)
 	{
 		preOrderAVL(N->L);

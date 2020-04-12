@@ -1,12 +1,13 @@
 #ifndef AVL_HEADER_FILE
 #define AVL_HEADER_FILE
 
-int heightAVL(struct NodeAVL* N);
-void setHeightAVL(struct NodeAVL** N);
+//int heightAVL(struct NodeAVL* N);
+//void setHeightAVL(struct NodeAVL** N);
 struct NodeAVL* rightRotAVL(struct NodeAVL* N);
 struct NodeAVL* leftRotAVL(struct NodeAVL* N);
 struct NodeAVL* leftRightRotAVL(struct NodeAVL* N);
 struct NodeAVL* rightLeftRotAVL(struct NodeAVL* N);
+struct NodeAVL* balancing(struct NodeAVL** N, int key);
 struct NodeAVL* insertAVL(struct NodeAVL* N, int key);
 struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight);
 int getMaxHeightAVL(struct NodeAVL* N);

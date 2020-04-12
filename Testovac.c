@@ -9,7 +9,7 @@
 #include "DoubleHashing-Smrecek.h"
 #include "Chaining-prevzate-Smrecek.h"
 
-int* getArray(int number) {
+int* getArray(int number) {										// Funkcia na generovanie postupnosti cisel od 1 po number+1 
 	int* Arr = (int*)malloc(number * sizeof(int));
 
 	for (int i = 0; i < number; i++)
@@ -18,13 +18,13 @@ int* getArray(int number) {
 	return Arr;
 }
 
-void printArray(int* Array, int number) {
+void printArray(int* Array, int number) {						// Pomocna funkcia pre kontrolny vypis vygenerovanej postupnosti
 	for (int i = 0; i < number; i++)
 		printf("%d ", Array[i]);
 	printf("\n");
 }
 
-struct NodeAVL* AVLtestInsert(int* Array, int number) {
+struct NodeAVL* AVLtestInsert(int* Array, int number) {			// Funkcia vkladajuca prvky postupnosti do AVL stromu
 	struct NodeAVL* root = NULL;
 	for (int i = 0; i < number; i++)
 		root = insertAVL(root, Array[i]);
@@ -32,7 +32,7 @@ struct NodeAVL* AVLtestInsert(int* Array, int number) {
 }
 
 struct NodeAVL* AVLtestSearch(struct NodeAVL* root, int* Array, int number) {
-	struct NodeAVL* N = NULL;
+	struct NodeAVL* N = NULL;									// Funkcia hladajuca prvky postupnosti v AVL strome
 	int i;
 	for (i = 0; i < number; i++) {
 		N = searchAVL(root, Array[i]);
@@ -40,7 +40,7 @@ struct NodeAVL* AVLtestSearch(struct NodeAVL* root, int* Array, int number) {
 	return root;
 }
 
-void RBtestInsert(int* Array, int number) {
+void RBtestInsert(int* Array, int number) {						// Funkcia vkladajuca prvky postupnosti do RB stromu
 	NILL_RB = malloc(sizeof(struct node));
 	NILL_RB->color = BLACK;
 	ROOT_RB = NILL_RB;
@@ -49,14 +49,14 @@ void RBtestInsert(int* Array, int number) {
 }
 
 
-struct node* RBtestSearch(int* Array, int number) {
+struct node* RBtestSearch(int* Array, int number) {				// Funkcia hladajuca prvky postupnosti v RB strome
 	struct node* N = NULL;
 	for (int i = 0; i < number; i++)
 		N = tree_search(Array[i]);
 	return N;
 }
 
-int* DoubleHashInsert(int *size, int* Array, int number) {
+int* DoubleHashInsert(int *size, int* Array, int number) {		// Funkcia vkladajuca prvky postupnosti do Double hashing tabulky
 	*size = Primes[0];
 	int count = 0;
 
@@ -71,7 +71,7 @@ int* DoubleHashInsert(int *size, int* Array, int number) {
 }
 
 void DoubleHashSearch(int* hashTable, int size, int* Array, int number) {
-	int b;
+	int b;														// Funkcia vyhladavajuca prvky pola v Double hashing tabulke
 	for (int i = 0; i < number; i++)
 	{
 		b = doubleSearch(hashTable, Array[i], size);
@@ -79,7 +79,7 @@ void DoubleHashSearch(int* hashTable, int size, int* Array, int number) {
 }
 
 void HashTableInsert(HashTable* table, int* Array, int number) {
-	ht_setup(&*table, sizeof(int), sizeof(int), 10);
+	ht_setup(&*table, sizeof(int), sizeof(int), 10);			// Funkcia vkladajuca prvky postupnosti do Chaining tabulky 
 	ht_reserve(&*table, 100);
 	int x;
 	int y = 4;
@@ -91,7 +91,7 @@ void HashTableInsert(HashTable* table, int* Array, int number) {
 }
 
 void HashTableSearch(HashTable* table, int* Array, int number) {
-	int x;
+	int x;														// Funkcia vyhladavajuca prvky pola v Chaining tabulke
 	int b;
 	for (int i = 0; i < number; i++)
 	{
@@ -106,7 +106,7 @@ void HashTableSearch(HashTable* table, int* Array, int number) {
 	}
 }
 
-void AVLtestInsertSearch(int number) {
+void AVLtestInsertSearch(int number) {							// Funkcia na meranie casu pre Insert a Search v AVL
 	int* Array = getArray(number);
 
 	LARGE_INTEGER frequency;
@@ -130,7 +130,7 @@ void AVLtestInsertSearch(int number) {
 	free(Array);
 }
 
-void RBtestInsertSearch(int number) {
+void RBtestInsertSearch(int number) {							// Funkcia na meranie casu pre Insert a Search v RB
 	int* Array = getArray(number);
 
 	LARGE_INTEGER frequency;
@@ -154,7 +154,7 @@ void RBtestInsertSearch(int number) {
 	free(Array);
 }
 
-void DHtestInsertSearch(int number) {
+void DHtestInsertSearch(int number) {							// Funkcia na meranie casu pre Insert a Search v Double hashing tabulke
 	int* Array = getArray(number);
 
 	LARGE_INTEGER frequency;
@@ -181,7 +181,7 @@ void DHtestInsertSearch(int number) {
 	free(Array);
 }
 
-void CHtestInsertSearch(int number) {
+void CHtestInsertSearch(int number) {							// Funkcia na meranie casu pre Insert a Search v Chaining tabulke
 	int* Array = getArray(number);
 
 	LARGE_INTEGER frequency;
@@ -206,7 +206,8 @@ void CHtestInsertSearch(int number) {
 	free(Array);
 }
 
-int main() {
+int main2() {
+	// Samotne testovanie pomocou vyberu z moznosti a nasledneho zavolania prislusnej testovacej funkcie
 	int n = 0;
 	
 	char choice;

@@ -17,6 +17,8 @@
  *				     That means each path contains same number of BLACK nodes.
  */
 
+// Prevzaty Cerveno-Cierny strom
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "RedBlack-prevzate-Smrecek.h"			// Hlavicka vytiahnuta von
