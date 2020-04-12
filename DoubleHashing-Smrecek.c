@@ -36,8 +36,8 @@ int doubleCompress(int key, int size, int iter, int indexH1, int indexH2) {
 int* doubleInsert(int* hashTable, int key, int* size, int* count) {
 	int iter = 0;										// Funkcia na vlozenie do tabulky
 
-	int indexH1 = doubleHash1(key, size);
-	int indexH2 = doubleHash2(key, size);
+	int indexH1 = doubleHash1(key, *size);
+	int indexH2 = doubleHash2(key, *size);
 
 	int indexC = doubleCompress(key, *size, iter++, indexH1, indexH2);
 
@@ -52,17 +52,17 @@ int* doubleInsert(int* hashTable, int key, int* size, int* count) {
 	return hashTable;
 }
 
-int* doubleResize(int* hashTable, int size, int* newSize, int* count) {
+int* doubleResize(int** hashTable, int size, int* newSize, int* count) {
 	int* newHashTable = NULL;							// Funkcia na zvacsenie tabulky
 	newHashTable = createHashTable(*newSize);
 
 	for (int i = 0; i < size; i++) {
-		if (hashTable[i] != -1)
+		if ((*hashTable)[i] != -1)
 		{
-			newHashTable = doubleInsert(newHashTable, hashTable[i], &*newSize, &*count);
+			newHashTable = doubleInsert(newHashTable, (*hashTable)[i], &*newSize, &*count);
 		}
 	}
-	free(*hashTable);
+	free((*hashTable));
 	return newHashTable;
 }
 
@@ -74,7 +74,7 @@ int* autoInsert(int* hashTable, int key, int* size, int* count) {
 		while (oldsize > Primes[i++]);
 		*size = Primes[i];
 		*count = 0;
-		hashTable = doubleResize(hashTable, oldsize, &*size, &*count);
+		hashTable = doubleResize(&hashTable, oldsize, &*size, &*count);
 	}
 	hashTable = doubleInsert(hashTable, key, &*size, &*count);
 	return hashTable;

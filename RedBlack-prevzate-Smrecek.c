@@ -26,7 +26,7 @@
 #define RED 0
 #define BLACK 1
 
-//struct node {					// Zakomentovane
+//struct node {									// Zakomentovane
 //	int key;
 //	int color;
 //	struct node* parent;

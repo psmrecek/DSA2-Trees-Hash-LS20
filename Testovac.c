@@ -28,15 +28,16 @@ struct NodeAVL* AVLtestInsert(int* Array, int number) {			// Funkcia vkladajuca 
 	struct NodeAVL* root = NULL;
 	for (int i = 0; i < number; i++)
 		root = insertAVL(root, Array[i]);
+
 	return root;
 }
 
 struct NodeAVL* AVLtestSearch(struct NodeAVL* root, int* Array, int number) {
 	struct NodeAVL* N = NULL;									// Funkcia hladajuca prvky postupnosti v AVL strome
 	int i;
-	for (i = 0; i < number; i++) {
+	for (i = 0; i < number; i++) 
 		N = searchAVL(root, Array[i]);
-	}
+
 	return root;
 }
 
@@ -53,6 +54,7 @@ struct node* RBtestSearch(int* Array, int number) {				// Funkcia hladajuca prvk
 	struct node* N = NULL;
 	for (int i = 0; i < number; i++)
 		N = tree_search(Array[i]);
+
 	return N;
 }
 
@@ -64,18 +66,16 @@ int* DoubleHashInsert(int *size, int* Array, int number) {		// Funkcia vkladajuc
 	hashTable = createHashTable(*size);
 
 	for (int i = 0; i < number; i++)
-	{
 		hashTable = autoInsert(hashTable, Array[i], &*size, &count);
-	}
+
 	return hashTable;
 }
 
 void DoubleHashSearch(int* hashTable, int size, int* Array, int number) {
 	int b;														// Funkcia vyhladavajuca prvky pola v Double hashing tabulke
 	for (int i = 0; i < number; i++)
-	{
 		b = doubleSearch(hashTable, Array[i], size);
-	}
+
 }
 
 void HashTableInsert(HashTable* table, int* Array, int number) {
@@ -96,13 +96,10 @@ void HashTableSearch(HashTable* table, int* Array, int number) {
 	for (int i = 0; i < number; i++)
 	{
 		x = Array[i];
-		if (ht_contains(&*table, &x)) {
+		if (ht_contains(&*table, &x))
 			b = 1;
-		}
 		else
-		{
 			b = 0;
-		}
 	}
 }
 
@@ -206,7 +203,7 @@ void CHtestInsertSearch(int number) {							// Funkcia na meranie casu pre Inser
 	free(Array);
 }
 
-int main2() {
+int main() {
 	// Samotne testovanie pomocou vyberu z moznosti a nasledneho zavolania prislusnej testovacej funkcie
 	int n = 0;
 	

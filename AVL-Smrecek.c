@@ -34,7 +34,6 @@ struct NodeAVL* rightRotAVL(struct NodeAVL* N) {				// Rotacia doprava so zmenam
 
 	setHeightAVL(&N);
 	setHeightAVL(&newN);
-
 	return newN;
 }
 
@@ -109,38 +108,21 @@ struct NodeAVL* insertAVL(struct NodeAVL* N, int key) {			// Rekurzivna funkcia 
 	return balancing(&N, key);
 }
 
-struct NodeAVL* searchMaxHeightAVL(struct NodeAVL* N, int* maxHeight) {
-	if (N == NULL)												// Pomocna funkcia pre rekurzivny vypocet maximalnej vysky stromu
-		return N;
-
-	*maxHeight = *maxHeight > N->height ? *maxHeight : N->height;
-
-	return searchMaxHeightAVL(N->L, &*maxHeight);
-	return searchMaxHeightAVL(N->R, &*maxHeight);
+struct NodeAVL* searchAVLiter(struct NodeAVL* N, int key) {	// Iterativna funkcia pre vyhladavanie
+	while (N != NULL && N->key != key)
+		if (key < N->key)
+			N = N->L;
+		else
+			N = N->R;
+	return N;
 }
 
-int getMaxHeightAVL(struct NodeAVL* N) {						// Pomocna funkcia spustajuca rekurzivny vypocet vysky stromu
-	int maxHeight = 0;
-
-	N = searchMaxHeightAVL(N, &maxHeight);
-	return maxHeight;
-}
-
-struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {			// Rekurzivna funkcia na najdenie prvku v strome
+struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {		// Rekurzivna funkcia na najdenie prvku v strome
 	if (N == NULL || N->key == key)
 		return N;
 	if (key < N->key)
 		return searchAVL(N->L, key);
 	return searchAVL(N->R, key);
-}
-
-void preOrderAVL(struct NodeAVL* N) {							// Preorder rekurzivny vypis (podla prezentacie)
-	if (N != NULL)
-	{
-		printf("%d-%dx ", N->key, N->count);
-		preOrderAVL(N->L);
-		preOrderAVL(N->R);
-	}
 }
 
 void inOrderAVL(struct NodeAVL* N) {							// Ineorder rekurzivny vypis (podla prezentacie)
@@ -158,5 +140,14 @@ void postOrderAVL(struct NodeAVL* N) {							// Postorder rekurzivny vypis (podl
 		preOrderAVL(N->L);
 		preOrderAVL(N->R);
 		printf("%d-%dx ", N->key, N->count);
+	}
+}
+
+void preOrderAVL(struct NodeAVL* N) {							// Preorder rekurzivny vypis (podla prezentacie)
+	if (N != NULL)
+	{
+		printf("%d-%dx ", N->key, N->count);
+		preOrderAVL(N->L);
+		preOrderAVL(N->R);
 	}
 }
