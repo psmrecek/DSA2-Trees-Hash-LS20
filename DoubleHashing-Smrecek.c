@@ -6,8 +6,8 @@
 
 // Peter Smrecek
 
-Primes[17] = {131, 541, 1031, 5021, 10037, 50051, 100151, 500069, 1000037, 5000101,
-	10000121, 50000131, 100000049, 500000071, 1000000021, 5000000141, 10000000061 };
+Primes[10] = {131, 1031, 10061, 100151, 1000081,
+	10000121, 100000541, 1000000021, 10000000061 };
 
 // Pole prvocisel pouzivane na vyber velkosti tabulky
 
@@ -19,6 +19,8 @@ int* createHashTable(int size) {						// Alokovanie novej tabulky s pozadovanou 
 			hashTable[i] = -1;
 		return hashTable;
 	}
+	//printf("Pridelenie pamati pre Double hash tabulku zlyhalo.\nNepodarilo sa alokovat dostatocne vela pamati. Koniec programu.\n");
+	//exit(0);
 }
 
 int doubleHash1(int key, int size) {					// Hashovacia funkcia 1 (prevzata z prezentacie)
@@ -26,11 +28,17 @@ int doubleHash1(int key, int size) {					// Hashovacia funkcia 1 (prevzata z pre
 }
 
 int doubleHash2(int key, int size) {					// Hashovacia funkcia 2 (prevzata z prezentacie)
-	return 1 + (key % (size-2));
+	return 1 + (key % (size-4));
 }
 
 int doubleCompress(int key, int size, int iter, int indexH1, int indexH2) {
-	return (indexH1 + iter * indexH2) % size;			// Kompresna funkcia (prevzata z prezentacie)
+	int index = (indexH1 + iter * indexH2) % size;
+	//if (index < 0)
+	//{
+	//	printf("Pozor, nastalo pretecenie!\n");
+	//	printf("%d Zlyhal som key %d size %d iter %d indexH1 %d indexH %d\n",index, key, size, iter, indexH1, indexH2);
+	//}
+	return index;										// Kompresna funkcia (prevzata z prezentacie)
 }
 
 int* doubleInsert(int* hashTable, int key, int* size, int* count) {

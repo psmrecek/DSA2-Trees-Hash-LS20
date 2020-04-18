@@ -1,7 +1,7 @@
 #ifndef DH_HEADER_FILE
 #define DH_HEADER_FILE
 
-int Primes[17];
+int Primes[10];
 int* createHashTable(int size);
 int doubleHash1(int key, int size);
 int doubleHash2(int key, int size);

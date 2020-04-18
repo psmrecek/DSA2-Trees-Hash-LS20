@@ -11,6 +11,7 @@ struct NodeAVL* balancing(struct NodeAVL** N, int key);
 struct NodeAVL* insertAVL(struct NodeAVL* N, int key);
 struct NodeAVL* searchAVLiter(struct NodeAVL* N, int key);
 struct NodeAVL* searchAVL(struct NodeAVL* N, int key);
+struct NodeAVL* destroyAVL(struct NodeAVL* N);
 void preOrderAVL(struct NodeAVL* N);
 void inOrderAVL(struct NodeAVL* N);
 void postOrderAVL(struct NodeAVL* N);

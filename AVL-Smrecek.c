@@ -125,6 +125,15 @@ struct NodeAVL* searchAVL(struct NodeAVL* N, int key) {		// Rekurzivna funkcia n
 	return searchAVL(N->R, key);
 }
 
+struct NodeAVL* destroyAVL(struct NodeAVL* N) {				// Pomocna funkcia na uvolennie stromu po testovani, kvoli predchadzaniu memory leak
+	if (N == NULL)
+		return N;
+	destroyAVL(N->L);
+	destroyAVL(N->R);
+	
+	free(N);
+}
+
 void inOrderAVL(struct NodeAVL* N) {							// Ineorder rekurzivny vypis (podla prezentacie)
 	if (N != NULL)
 	{
